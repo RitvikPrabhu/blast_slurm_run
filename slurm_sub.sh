@@ -33,8 +33,7 @@ SLURM_ARGS=(
  -N 1
  --ntasks=1
  --cpus-per-task=${NTHREADS}
- -p long
- -A pn_cis240131
+ -p cpu
  --exclusive
  --time ${ELAPSE}
  -o "slurm-${NTHREADS}_threads"
