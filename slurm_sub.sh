@@ -36,7 +36,7 @@ SLURM_ARGS=(
  -p cpu
  --exclusive
  --time ${ELAPSE}
- -o "slurm-${NTHREADS}_threads"
+ -o ${OUTPUT_FILE}
 )
 
 
@@ -50,7 +50,9 @@ echo "Creating BLAST database..."
 ${NCBI_BLAST_PATH}/makeblastdb -in "${DATA_DIR}/${DBFILE}" -dbtype prot;
 
 echo "Running BLASTP..."
-/usr/bin/time -v -o ${TIME_LOG_FILE} ${NCBI_BLAST_PATH}/blastp -query "${DATA_DIR}/${QUERYFILE}" -db "data/${DBFILE}" -out ${BLASTP_OUTPUT} -num_threads ${NTHREADS} -outfmt 6 -evalue 0.000001 -max_target_seqs 10
+#/usr/bin/time -v -o ${TIME_LOG_FILE} ${NCBI_BLAST_PATH}/blastp -query "${DATA_DIR}/${QUERYFILE}" -db "data/${DBFILE}" -out ${BLASTP_OUTPUT} -num_threads ${NTHREADS} -outfmt 6 -evalue 0.000001 -max_target_seqs 10
+
+{ time ${NCBI_BLAST_PATH}/blastp -query "${DATA_DIR}/${QUERYFILE}" -db "data/${DBFILE}" -out ${BLASTP_OUTPUT} -num_threads ${NTHREADS} -outfmt 6 -evalue 0.000001 -max_target_seqs 10; } 2> ${TIME_LOG_FILE}
 
 # Record the end time
 END_TIME=\$(date +%s)

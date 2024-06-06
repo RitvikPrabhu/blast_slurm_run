@@ -4,7 +4,7 @@
 DBFILE="nr"
 QUERYFILE="non-rRNA-reads_sample50.fa"
 ELAPSE="12:00:00"
-NCBI_BLAST_PATH="/lustre/scratch/rprabhu/ncbi-blast-2.13.0+-src/c++/ReleaseMT/bin"
+NCBI_BLAST_PATH="/scratch/user/u.rp167879/ncbi-blast-2.13.0+-src/c++/ReleaseMT/bin"
 DATA_DIR="/scratch/user/u.rp167879/sparkleblast_data"
 THREAD_COUNTS=(1 2 4 8 16 32 48)
 NUM_RUNS=10
