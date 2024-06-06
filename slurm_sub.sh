@@ -37,7 +37,7 @@ SLURM_ARGS=(
  -A pn_cis240131
  --exclusive
  --time ${ELAPSE}
- -o "slurm-${NTHREADS}_threads"
+ -o ${OUTPUT_FILE}
 )
 
 
