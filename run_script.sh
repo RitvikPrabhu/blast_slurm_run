@@ -2,7 +2,7 @@
 
 # Arguments for slurm_sub.sh
 DBFILE="nr"
-QUERYFILE="non-rRNA-reads.fa"
+QUERYFILE="non-rRNA-reads_sample50.fa"
 ELAPSE="12:00:00"
 NCBI_BLAST_PATH="/lustre/scratch/rprabhu/ncbi-blast-2.13.0+-src/c++/ReleaseMT/bin"
 DATA_DIR="/lustre/scratch/rprabhu/sparkleblast_data"
