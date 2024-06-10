@@ -29,12 +29,14 @@ if [ ! -f ${DATA_DIR}/${QUERYFILE} ]; then
     exit 1;
 fi
 
+THREAD_DIR="${DATA_DIR}/threads_run"
+mkdir -p ${THREAD_DIR}
+
 SLURM_ARGS=(
  -N 1
  --ntasks=1
  --cpus-per-task=${NTHREADS}
  -p long
- -A pn_cis240131
  --exclusive
  --time ${ELAPSE}
  -o ${OUTPUT_FILE}
@@ -48,10 +50,14 @@ cat > $TMPFILE << EOF
 START_TIME=\$(date +%s)
 
 echo "Creating BLAST database..."
-${NCBI_BLAST_PATH}/makeblastdb -in "${DATA_DIR}/${DBFILE}" -dbtype prot;
+#${NCBI_BLAST_PATH}/makeblastdb -in "${DATA_DIR}/${DBFILE}" -dbtype nucl;
+#${NCBI_BLAST_PATH}/makeblastdb -in "${DATA_DIR}/${DBFILE}" -dbtype nucl -out "${THREAD_DIR}/${DBFILE}"
 
 echo "Running BLASTP..."
-/usr/bin/time -v -o ${TIME_LOG_FILE} ${NCBI_BLAST_PATH}/blastp -query "${DATA_DIR}/${QUERYFILE}" -db "data/${DBFILE}" -out ${BLASTP_OUTPUT} -num_threads ${NTHREADS} -outfmt 6 -evalue 0.000001 -max_target_seqs 10
+#/usr/bin/time -v -o ${TIME_LOG_FILE} ${NCBI_BLAST_PATH}/blastn -query "${DATA_DIR}/${QUERYFILE}" -db "data/${DBFILE}" -out ${BLASTP_OUTPUT} -num_threads ${NTHREADS} -outfmt 6 -evalue 0.0000000001 -max_target_seqs 10 -max_hsps 1 -qcov_hsp_perc 60 -perc_identity 60
+
+/usr/bin/time -v -o "${TIME_LOG_FILE}" ${NCBI_BLAST_PATH}/blastp -query "${DATA_DIR}/${QUERYFILE}" -db "${THREAD_DIR}/${DBFILE}" -out "${BLASTP_OUTPUT}" -num_threads ${NTHREADS} -outfmt 6 -evalue 0.0000000001 -max_target_seqs 10 -max_hsps 1 -qcov_hsp_perc 60 -perc_identity 60
+
 
 # Record the end time
 END_TIME=\$(date +%s)
