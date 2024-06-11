@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Arguments for slurm_sub.sh
-DBFILE="nr"
+DBFILE="nt"
 QUERYFILE="non-rRNA-reads_sample50.fa"
-ELAPSE="48:00:00"
+ELAPSE="168:00:00"
 NCBI_BLAST_PATH="/lustre/scratch/rprabhu/ncbi-blast-2.13.0+-src/c++/ReleaseMT/bin"
-DATA_DIR="/lustre/scratch/rprabhu/sparkleblast_data"
-THREAD_COUNTS=(1 2 4 8 16 32 48)
-#THREAD_COUNTS=(48)
+DATA_DIR="/lustre/scratch/rprabhu/sparkleblast_data/nt_run"
+#THREAD_COUNTS=(1 2 4 8 16 32 48)
+THREAD_COUNTS=(48)
 NUM_RUNS=1
 
 submit_job() {
