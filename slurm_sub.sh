@@ -53,10 +53,10 @@ echo "Creating BLAST database..."
 #${NCBI_BLAST_PATH}/makeblastdb -in "${DATA_DIR}/${DBFILE}" -dbtype nucl;
 #${NCBI_BLAST_PATH}/makeblastdb -in "${DATA_DIR}/${DBFILE}" -dbtype nucl -out "${MAKEDB_OUT}/${DBFILE}"
 
-echo "Running BLASTP..."
+echo "Running BLASTN..."
 #/usr/bin/time -v -o ${TIME_LOG_FILE} ${NCBI_BLAST_PATH}/blastn -query "${DATA_DIR}/${QUERYFILE}" -db "data/${DBFILE}" -out ${BLASTP_OUTPUT} -num_threads ${NTHREADS} -outfmt 6 -evalue 0.0000000001 -max_target_seqs 10 -max_hsps 1 -qcov_hsp_perc 60 -perc_identity 60
 
-/usr/bin/time -v -o "${TIME_LOG_FILE}" ${NCBI_BLAST_PATH}/blastp -query "${DATA_DIR}/${QUERYFILE}" -db "${MAKEDB_OUT}/${DBFILE}" -out "${BLASTP_OUTPUT}" -num_threads ${NTHREADS} -outfmt 6 -evalue 0.0000000001 -max_target_seqs 10 -max_hsps 1 -qcov_hsp_perc 60 -perc_identity 60
+/usr/bin/time -v -o "${TIME_LOG_FILE}" ${NCBI_BLAST_PATH}/blastn -query "${DATA_DIR}/${QUERYFILE}" -db "${MAKEDB_OUT}/${DBFILE}" -out "${BLASTP_OUTPUT}" -num_threads ${NTHREADS} -outfmt 6 -evalue 0.0000000001 -max_target_seqs 10 -max_hsps 1 -qcov_hsp_perc 60 -perc_identity 60
 
 
 # Record the end time
