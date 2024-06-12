@@ -7,8 +7,8 @@ QUERYFILE=$2
 NTHREADS=$3
 ELAPSE=${4:-30:00}
 NCBI_BLAST_PATH=${5:-"/lustre/scratch/rprabhu/ncbi-blast-2.13.0+/bin"}
-TIME_LOG_FILE=${6:-"blastp_time.log"}
-BLASTP_OUTPUT=${7:-"blastp_output.out"}
+TIME_LOG_FILE=${6:-"blastn_time.log"}
+BLASTP_OUTPUT=${7:-"blastn_output.out"}
 DATA_DIR=${8:-"data"}
 OUTPUT_FILE=${9:-"slurm-${NTHREADS}_threads"}
 
@@ -17,11 +17,6 @@ if [ -z ${NTHREADS} ]; then
   echo "NTHREADS not set!"
   echo ${USAGE}
   exit 1
-fi
-if [ ! -f ${DATA_DIR}/${DBFILE} ]; then
-    echo "Could not find data/${DBFILE}"
-    echo ${USAGE}
-    exit 1;
 fi
 if [ ! -f ${DATA_DIR}/${QUERYFILE} ]; then
     echo "Could not find data/${QUERYFILE}"
@@ -37,7 +32,8 @@ SLURM_ARGS=(
  --exclusive
  --time ${ELAPSE}
  -o ${OUTPUT_FILE}
-)
+ --dependency=afterok:176325
+ )
 
 
 TMPFILE=$(mktemp)
@@ -46,13 +42,10 @@ cat > $TMPFILE << EOF
 # Record the start time
 START_TIME=\$(date +%s)
 
-echo "Creating BLAST database..."
-${NCBI_BLAST_PATH}/makeblastdb -in "${DATA_DIR}/${DBFILE}" -dbtype prot;
 
-echo "Running BLASTP..."
-#/usr/bin/time -v -o ${TIME_LOG_FILE} ${NCBI_BLAST_PATH}/blastp -query "${DATA_DIR}/${QUERYFILE}" -db "data/${DBFILE}" -out ${BLASTP_OUTPUT} -num_threads ${NTHREADS} -outfmt 6 -evalue 0.000001 -max_target_seqs 10
+echo "Running BLASTN..."
 
-{ time ${NCBI_BLAST_PATH}/blastp -query "${DATA_DIR}/${QUERYFILE}" -db "data/${DBFILE}" -out ${BLASTP_OUTPUT} -num_threads ${NTHREADS} -outfmt 6 -evalue 0.000001 -max_target_seqs 10; } 2> ${TIME_LOG_FILE}
+/usr/bin/time -v -o "${TIME_LOG_FILE}" ${NCBI_BLAST_PATH}/blastn -query "${DATA_DIR}/${QUERYFILE}" -db "${DATA_DIR}/${DBFILE}" -out "${BLASTP_OUTPUT}" -num_threads ${NTHREADS} -outfmt 6 -evalue 0.0000000001 -max_target_seqs 10 -max_hsps 1 -qcov_hsp_perc 60 -perc_identity 60
 
 # Record the end time
 END_TIME=\$(date +%s)
